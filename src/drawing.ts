@@ -1,69 +1,34 @@
 export interface IDrawings {
-    [key: string]: Svgson;
+    [key: string]: IDrawing;
 }
-
-export interface Svgson {
-    name: string;
-    type: Type;
-    value: string;
-    attributes: SvgsonAttributes;
-    children: SvgsonChild[];
-}
-
-export interface SvgsonAttributes {
-    version: string;
-    xmlns: string;
-    width: string;
-    height: string;
+export interface IDrawing {
     viewBox: string;
     preserveAspectRatio: string;
+    gs: G[];
 }
 
-export interface SvgsonChild {
-    name: string;
-    type: Type;
-    value: string;
-    attributes: PurpleAttributes;
-    children: ChildChild[];
-}
-
-export interface PurpleAttributes {
-    transform?: string;
-    fill?: Fill;
-    stroke?: Stroke;
+export interface G {
+    transform: string;
+    fill: Fill;
+    stroke: Stroke;
+    vectors: Vectors;
 }
 
 export enum Fill {
-    Ffffff = "#ffffff",
-    The000000 = "#000000",
+    White = "#ffffff",
+    Black = "#000000",
 }
 
 export enum Stroke {
     None = "none",
 }
 
-export interface ChildChild {
-    name: Name;
-    type: Type;
-    value: string;
-    attributes: FluffyAttributes;
-    children: any[];
+export interface Vectors {
+    path: Path[];
 }
 
-export interface FluffyAttributes {
-    fill?: Fill;
-    stroke?: Stroke;
-    d?: string;
+export interface Path {
+    fill: Fill | string;
+    stroke: Stroke;
+    d: string;
 }
-
-export enum Name {
-    Empty = "",
-    Path = "path",
-}
-
-export enum Type {
-    Element = "element",
-    Text = "text",
-}
-
-

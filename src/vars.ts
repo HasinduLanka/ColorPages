@@ -1,17 +1,37 @@
-import { writable, readable } from "svelte/store";
+import { writable, readable, Writable } from "svelte/store";
 import drawings from "./drawings";
-import type { IDrawings } from "./drawing";
+import type { IDrawings, IDrawing } from "./drawing";
 
-export let DrawingID = writable("");
+// Current drawings
+export let CDrawingID = writable("");
+export let CDrawing: Writable<IDrawing> = writable();
 
 export let Drawings = drawings as IDrawings;
 
-
-export function GetRandomColor() {
-    var letters = "0123456789ABCDEF";
-    var color = "#";
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+export function SaveDrawing(id: string, drawing: IDrawing) {
+    let djson = JSON.stringify(drawing);
+    localStorage.setItem("drw-" + id, djson);
 }
+
+export function LoadDrawing(id: string): IDrawing {
+    let djson = localStorage.getItem("drw-" + id);
+    if (djson) {
+        let drawing: IDrawing = JSON.parse(djson);
+        return drawing;
+    }
+    return null;
+}
+
+export function ListSavedDrawings(): string[] {
+    let ids: string[] = [];
+    for (var i in localStorage) {
+        if (i.startsWith("drw-")) {
+            let id = i.substr(4);
+            ids.push(id);
+        }
+    }
+
+    return ids;
+}
+
+

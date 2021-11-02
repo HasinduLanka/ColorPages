@@ -5,6 +5,6 @@ bash traceall.sh
 
 cd ../..
 
-cp Assets/drawings/drawings.js src/drawings.js
+node refine.drawings.mjs
 
 echo "Created drawings.js"
