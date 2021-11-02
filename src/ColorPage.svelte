@@ -66,67 +66,76 @@
     }
 </script>
 
-<div class="flex-6">
-    <div class="items-center h-full text-gray-300 bg-blue-800 py-1 px-1">
-        <div
-            class="hover:bg-blue-700 px-4 py-2 my-1 backbutton"
-            on:click={() => {
-                $Route = "";
-                Save();
-            }}
-        >
-            &nbsp;
-        </div>
-        <div
-            class="hover:bg-blue-700 px-4 py-2 my-1"
-            on:click={Power_RandomColor}
-        >
-            Rnd
-        </div>
-        <div class="hover:bg-blue-700 px-4 py-2 my-1" on:click={Power_Whitout}>
-            Erase
+<div class="h-screen w-screen flex">
+    <div style="width: 5vw;">
+        <div class="items-center h-screen text-gray-300 bg-blue-800 py-1 px-1">
+            <div
+                class="hover:bg-blue-700 px-4 py-2 my-1 backbutton"
+                on:click={() => {
+                    $Route = "";
+                    Save();
+                }}
+            >
+                &nbsp;
+            </div>
+            <div
+                class="hover:bg-blue-700 px-4 py-2 my-1"
+                on:click={Power_RandomColor}
+            >
+                Rnd
+            </div>
+            <div
+                class="hover:bg-blue-700 px-4 py-2 my-1"
+                on:click={Power_Whitout}
+            >
+                Erase
+            </div>
         </div>
     </div>
-</div>
-<div class="flex-1">
-    <div>
-        {#if drawing}
-            <svg
-                width="100%"
-                height="100%"
-                viewBox={drawing.viewBox}
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio={drawing.preserveAspectRatio}
-            >
-                {#each drawing.gs as G}
-                    <g transform={G.transform} fill={G.fill} stroke={G.stroke}>
-                        {#each G.vectors.path as pathson}
-                            {#if pathson.fill !== Fill.Black}
-                                <path
-                                    d={pathson.d}
-                                    fill={pathson.fill}
-                                    stroke={pathson.stroke}
-                                    on:click={() => {
-                                        pathson.fill = GetRandomColor();
-                                        drawing = drawing;
-                                        WaitAndSave();
-                                        console.log(
-                                            "Colored in ",
-                                            pathson.fill
-                                        );
-                                    }}
-                                />
-                            {:else}
-                                <path
-                                    d={pathson.d}
-                                    fill={pathson.fill}
-                                    stroke={pathson.stroke}
-                                />
-                            {/if}
-                        {/each}
-                    </g>
-                {/each}
-            </svg>
-        {/if}
+    <div style="width: 95vw;">
+        <div>
+            {#if drawing}
+                <svg
+                    width="100%"
+                    height="100vh"
+                    viewBox={drawing.viewBox}
+                    xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio={drawing.preserveAspectRatio}
+                >
+                    {#each drawing.gs as G}
+                        <g
+                            transform={G.transform}
+                            fill={G.fill}
+                            stroke={G.stroke}
+                        >
+                            {#each G.vectors.path as pathson}
+                                {#if pathson.fill !== Fill.Black}
+                                    <path
+                                        d={pathson.d}
+                                        fill={pathson.fill}
+                                        stroke={pathson.stroke}
+                                        on:click={() => {
+                                            pathson.fill = GetRandomColor();
+                                            drawing = drawing;
+                                            WaitAndSave();
+                                            console.log(
+                                                "Colored in ",
+                                                pathson.fill
+                                            );
+                                        }}
+                                    />
+                                {:else}
+                                    <path
+                                        d={pathson.d}
+                                        fill={pathson.fill}
+                                        stroke={pathson.stroke}
+                                    />
+                                {/if}
+                            {/each}
+                        </g>
+                    {/each}
+                </svg>
+            {/if}
+        </div>
     </div>
 </div>
