@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 rm -rf svgs
 mkdir -p svgs
 
-echo "export default Drawings = {" >svgsons/drawings.js
+echo "export default Drawings = {" >drawings.js
 
 for filename in raw/*.*; do
 
@@ -16,12 +16,12 @@ for filename in raw/*.*; do
 
     rm -f $FILE-tmp.bmp
 
-    echo -e '\n"'$FILENAME'"' : >>svgsons/drawings.js
-    svgson svgs/$FILENAME.svg -p >>svgsons/drawings.js
-    echo "," >>svgsons/drawings.js
+    echo -e '\n"'$FILENAME'"' : >>drawings.js
+    svgson svgs/$FILENAME.svg -p >>drawings.js
+    echo "," >>drawings.js
 
     echo "Traced $FILE"
 
 done
 
-echo -e "\n}" >>svgsons/drawings.js
+echo -e "\n}" >>drawings.js
