@@ -1,18 +1,16 @@
 <script lang="ts">
-	import Tailwindcss from "./Tailwindcss.svelte";
+	import GlobalCss from "./GlobalCss.svelte";
+	import Start from "./Start.svelte";
+	import ColorPage from "./ColorPage.svelte";
+	import { Route } from "./routes";
 </script>
 
-<Tailwindcss />
+<GlobalCss />
 
-<main class="p-4 mx-auto text-center max-w-xl">
-	<h1 class="uppercase text-6xl leading-normal font-thin text-svelte">
-		Hello World!
-	</h1>
-	<p class="mt-[3rem]">
-		Visit the
-		<a href="https://svelte.dev/tutorial" class="text-blue-500 underline">
-			Svelte tutorial
-		</a>
-		to learn how to build Svelte apps.
-	</p>
-</main>
+<div class="flex">
+	{#if $Route === ""}
+		<Start />
+	{:else if $Route === "colorpage"}
+		<ColorPage />
+	{/if}
+</div>
