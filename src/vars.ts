@@ -13,6 +13,10 @@ export function SaveDrawing(id: string, drawing: IDrawing) {
     localStorage.setItem("drw-" + id, djson);
 }
 
+export function DeleteDrawing(id: string) {
+    localStorage.removeItem("drw-" + id);
+}
+
 export function LoadDrawing(id: string): IDrawing {
     let djson = localStorage.getItem("drw-" + id);
     if (djson) {

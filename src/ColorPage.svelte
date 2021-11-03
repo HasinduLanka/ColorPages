@@ -2,7 +2,7 @@
     import { Route } from "./routes";
     import type { IDrawing } from "./drawing";
     import { Fill } from "./drawing";
-    import { CDrawing, CDrawingID, SaveDrawing } from "./vars";
+    import { CDrawing, CDrawingID, DeleteDrawing, SaveDrawing } from "./vars";
 
     let drawing: IDrawing = $CDrawing;
 
@@ -24,12 +24,13 @@
         console.log("MultiColor!");
         drawing.gs.forEach((G) => {
             G.vectors.path.forEach((P) => {
-                if (P.fill !== Fill.Black) {
+                if (P.fill === Fill.White) {
                     P.fill = GetRandomColor();
                     drawing = drawing;
                 }
             });
         });
+        WaitAndSave();
     }
 
     function Power_Whitout() {
@@ -42,6 +43,7 @@
                 }
             });
         });
+        WaitAndSave();
     }
 
     function Save() {
@@ -64,13 +66,60 @@
         }
         threadWaitAndSave = setTimeout(Save, 3000);
     }
+
+    let palettes = [
+        ["#FF0000", "#00EE00", "#008B8B", "#EEEE00", "#FF00FF"],
+        ["#800000", "#008000", "#0000FF", "#EEA500", "#800080"],
+        ["#111111", "#888888", "#EEEEEE", "#C68642", "#F1C27D"],
+    ];
+    let selectedPalette = 0;
+    let palette = palettes[selectedPalette];
+    let SelectedColor = palette[0];
+
+    function SelectColor(clr: string) {
+        SelectedColor = clr;
+    }
+
+    function SwitchPalette() {
+        selectedPalette = (selectedPalette + 1) % palettes.length;
+        palette = palettes[selectedPalette];
+        cheatcode += "P";
+        CheckCheats();
+    }
+
+    function CheckCheats() {
+        if (cheatcode.length > 10) {
+            cheatcode = cheatcode.slice(1);
+            if (cheatcode === "PPPPPPPPPP") {
+                CheatsActive = true;
+                cheatcode = "X";
+            } else {
+                CheatsActive = false;
+            }
+        } else {
+            CheatsActive = false;
+        }
+        DeletePresses = 0;
+    }
+
+    let cheatcode = "";
+    let CheatsActive = false;
+
+    let DeletePresses = 0;
+
+    function ConfirmAndDelete() {
+        if (confirm("Delete this drawing ? Tap [ok] to delete")) {
+            DeleteDrawing($CDrawingID);
+            $Route = "";
+        }
+    }
 </script>
 
-<div class="h-screen w-screen flex">
-    <div style="width: 5vw;">
+<div class="h-screen w-screen flex ">
+    <div style="width: 10vw" class="h-screen">
         <div class="items-center h-screen text-gray-300 bg-blue-800 py-1 px-1">
             <div
-                class="hover:bg-blue-700 px-4 py-2 my-1 backbutton"
+                class="hover:bg-blue-700 navButton backbutton mx-auto"
                 on:click={() => {
                     $Route = "";
                     Save();
@@ -78,21 +127,61 @@
             >
                 &nbsp;
             </div>
+
+            {#if CheatsActive}
+                <div
+                    class="hover:bg-red-400 icon-delete mx-auto cheatButton"
+                    on:click={() => {
+                        DeletePresses++;
+                        if (DeletePresses > 3) {
+                            DeletePresses = 0;
+                            ConfirmAndDelete();
+                        }
+                    }}
+                >
+                    &nbsp;
+                </div>
+                <div
+                    class="hover:bg-blue-900 icon-colorreset mx-auto cheatButton"
+                    on:click={() => {
+                        Power_Whitout();
+                    }}
+                >
+                    &nbsp;
+                </div>
+                <div
+                    class="hover:bg-purple-700 icon-colorfill mx-auto cheatButton"
+                    on:click={() => {
+                        Power_RandomColor();
+                    }}
+                >
+                    &nbsp;
+                </div>
+            {:else}
+                {#each palette as clr, i}
+                    <div
+                        class="my-1 paletteButton"
+                        style="background-color: {clr};"
+                        on:click={() => {
+                            SelectColor(clr);
+                            cheatcode += i.toString();
+                            CheckCheats();
+                        }}
+                    >
+                        &nbsp;
+                    </div>
+                {/each}
+            {/if}
+
             <div
-                class="hover:bg-blue-700 px-4 py-2 my-1"
-                on:click={Power_RandomColor}
+                class="hover:bg-blue-700 navButton icon-palette mx-auto "
+                on:click={SwitchPalette}
             >
-                Rnd
-            </div>
-            <div
-                class="hover:bg-blue-700 px-4 py-2 my-1"
-                on:click={Power_Whitout}
-            >
-                Erase
+                &nbsp;
             </div>
         </div>
     </div>
-    <div style="width: 95vw;">
+    <div style="width: 90vw;">
         <div>
             {#if drawing}
                 <svg
@@ -115,9 +204,10 @@
                                         fill={pathson.fill}
                                         stroke={pathson.stroke}
                                         on:click={() => {
-                                            pathson.fill = GetRandomColor();
+                                            pathson.fill = SelectedColor;
                                             drawing = drawing;
                                             WaitAndSave();
+                                            cheatcode = "";
                                             console.log(
                                                 "Colored in ",
                                                 pathson.fill
@@ -139,3 +229,31 @@
         </div>
     </div>
 </div>
+
+<style>
+    .paletteButton {
+        border: 1px solid rgb(99, 99, 99);
+        border-radius: 0.5rem;
+        padding-top: 14vh;
+        height: 16vh;
+        padding-bottom: 0;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    }
+
+    .navButton {
+        height: 6vh;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 0.5vh;
+        margin-bottom: 0.5vh;
+    }
+
+    .cheatButton {
+        height: 20vh;
+        padding-top: 6vh;
+        padding-bottom: 6vh;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+    }
+</style>
