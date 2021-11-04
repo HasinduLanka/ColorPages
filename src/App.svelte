@@ -4,23 +4,37 @@
 	import ColorPage from "./ColorPage.svelte";
 	import { Route } from "./routes";
 
-	function openFullscreen() {
-		var elem = document.documentElement;
-		if (elem.requestFullscreen) {
-			elem.requestFullscreen();
-		}
+	async function openFullscreen() {
+		try {
+			var elem: any = document.documentElement;
+			if (elem.requestFullscreen) {
+				elem.requestFullscreen();
+			} else if (elem.webkitRequestFullScreen) {
+				elem.webkitRequestFullScreen();
+			}
+		} catch {}
+
+		try {
+			if (screen && screen.orientation && screen.orientation.lock) {
+				await screen.orientation.lock("landscape-primary");
+			}
+		} catch {}
 	}
 
 	function closeFullscreen() {
-		if (document.exitFullscreen) {
-			var elem = document.documentElement;
-			document.exitFullscreen();
-		}
-	}
+		try {
+			if (document.exitFullscreen) {
+				var elem = document.documentElement;
+				document.exitFullscreen();
+			}
+		} catch {}
 
-	// $: if ($Route === "colorpage") {
-	// 	openFullscreen();
-	// }
+		try {
+			if (screen && screen.orientation && screen.orientation.lock) {
+				screen.orientation.unlock();
+			}
+		} catch {}
+	}
 </script>
 
 <GlobalCss />

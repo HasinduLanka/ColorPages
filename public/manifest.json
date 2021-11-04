@@ -1,8 +1,9 @@
 {
     "name": "Color Book",
-    "short_name": "ColorBook",
+    "short_name": "Color Book",
     "start_url": "./",
-    "display": "standalone",
+    "display": "fullscreen",
+    "orientation": "landscape",
     "background_color": "#ffffff",
     "theme_color": "#000000",
     "icons": [

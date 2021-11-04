@@ -1,11 +1,20 @@
 <script lang="ts">
     import { Route } from "./routes";
-    import type { IDrawing } from "./drawing";
+    import type { IDrawing, Path } from "./drawing";
     import { Fill } from "./drawing";
     import { CDrawing, CDrawingID, DeleteDrawing, SaveDrawing } from "./vars";
 
     let drawing: IDrawing = $CDrawing;
 
+    function GoBack() {
+        Save();
+
+        if (PaintStrokes < 1) {
+            DeleteDrawing($CDrawingID);
+        }
+
+        $Route = "";
+    }
     function GetRandomColor() {
         var letters = "05AF";
         var color = "#";
@@ -102,6 +111,7 @@
         DeletePresses = 0;
     }
 
+    let PaintStrokes = 0;
     let cheatcode = "";
     let CheatsActive = false;
 
@@ -113,6 +123,14 @@
             $Route = "";
         }
     }
+
+    function DrawingPolygonClicked(pathson: Path) {
+        pathson.fill = SelectedColor;
+        drawing = drawing;
+        WaitAndSave();
+        cheatcode = "";
+        PaintStrokes++;
+    }
 </script>
 
 <div class="h-screen w-screen flex ">
@@ -120,10 +138,7 @@
         <div class="items-center h-screen text-gray-300 bg-blue-800 py-1 px-1">
             <div
                 class="hover:bg-blue-700 navButton backbutton mx-auto"
-                on:click={() => {
-                    $Route = "";
-                    Save();
-                }}
+                on:click={GoBack}
             >
                 &nbsp;
             </div>
@@ -162,7 +177,12 @@
                     <div
                         class="my-1 paletteButton"
                         style="background-color: {clr};"
-                        on:click={() => {
+                        on:touchstart={() => {
+                            SelectColor(clr);
+                            cheatcode += i.toString();
+                            CheckCheats();
+                        }}
+                        on:mousedown={() => {
                             SelectColor(clr);
                             cheatcode += i.toString();
                             CheckCheats();
@@ -181,8 +201,8 @@
             </div>
         </div>
     </div>
-    <div style="width: 90vw;">
-        <div>
+    <div style="width: 90vw;" class="h-screen">
+        <div class="h-screen">
             {#if drawing}
                 <svg
                     width="100%"
@@ -203,15 +223,11 @@
                                         d={pathson.d}
                                         fill={pathson.fill}
                                         stroke={pathson.stroke}
-                                        on:click={() => {
-                                            pathson.fill = SelectedColor;
-                                            drawing = drawing;
-                                            WaitAndSave();
-                                            cheatcode = "";
-                                            console.log(
-                                                "Colored in ",
-                                                pathson.fill
-                                            );
+                                        on:touchstart={() => {
+                                            DrawingPolygonClicked(pathson);
+                                        }}
+                                        on:mousedown={() => {
+                                            DrawingPolygonClicked(pathson);
                                         }}
                                     />
                                 {:else}

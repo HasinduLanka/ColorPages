@@ -6,6 +6,19 @@ self.addEventListener('fetch', event => event.respondWith(onFetch(event)));
 const cacheName = 'offline-cache'
 
 async function onInstall(event) {
+
+    event.waitUntil(
+        caches.open(cacheName).then(function (cache) {
+            return cache.addAll([
+                '/',
+                'index.html',
+                'favicon.png',
+                'build/bundle.css',
+                'build/bundle.js'
+            ]);
+        })
+    );
+
     console.info('Service worker: Install');
 }
 
@@ -22,4 +35,5 @@ async function onFetch(event) {
     }
 
     return cachedResponse || fetch(event.request);
+
 }
