@@ -1,66 +1,27 @@
-> This repo is now using `main` as the default branch.
-# Svelte + TS + Tailwind 2.2 app
+# Color Book
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/colinbate/svelte-ts-tailwind-template and is based on the official Svelte template with TypeScript pre-enabled and Tailwind CSS configured. Uses Tailwind CSS 2.2.15 with the JIT compiler enabled. **The JIT feature is in preview and not tied to SemVer, so I've set it to 2.2.15 specifically.**
+Simple line art colouring web app designed specifically for autistic children.
 
-> Note that this isn't a SvelteKit app, this is a vanilla Svelte template with the above mentioned technologies pre-installed.
+This project targets autistic children of all ages who's cognitive abilities are limited, thus other available colouring apps are not compatible.
 
-> ## Important
-> The build/watch machanism has changed in TailwindCSS 2.2 and as such it does not work properly with Rollup. I've fixed it, but in order to not break it, do not include a glob in the Tailwind purge config that targets the `public` folder.
+# License
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+Using any part of this project for commercial uses or closed source projects is prohibited.
 
-```bash
-npx degit colinbate/svelte-ts-tailwind-template svelte-app
-cd svelte-app
-```
+Usage of this project for open source projects is allowed and encouraged.
 
-Alternatively, if you are currently on GitHub, you can click the "Use this template" button at the top of this page.
+# Join us
 
-*Note that you will need to have [Node.js](https://nodejs.org) >=12.13 installed.*
+### Developer?
 
-## Get started
+Pull requests of new features, improvements are warmly welcomed 🤗
 
-Install the dependencies...
+### Parent of a unique child?
 
-```bash
-cd svelte-app
-npm install
-```
+Try this app together with your unique child, let him/her grasp it.
 
-...then start [Rollup](https://rollupjs.org):
+Let us know if we can adjust a few things for his/her favour, via ask.bitblazers@gmail.com
 
-```bash
-npm run dev
-```
+### Teacher? Physiologist? Expert on autistic spectrum?
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-
-## Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
-```
-
-## Using TypeScript
-
-TypeScript has already been enabled in this template.
-
+Help us to make this better and compatible with more of the spectrum. Open a new issue.
