@@ -138,7 +138,12 @@
         <div class="items-center h-screen text-gray-300 bg-blue-800 py-1 px-1">
             <div
                 class="hover:bg-blue-700 navButton backbutton mx-auto"
-                on:click={GoBack}
+                on:click={() => {
+                    GoBack();
+                }}
+                on:touchstart={() => {
+                    GoBack();
+                }}
             >
                 &nbsp;
             </div>
@@ -175,7 +180,9 @@
             {:else}
                 {#each palette as clr, i}
                     <div
-                        class="my-1 paletteButton"
+                        class={SelectedColor == clr
+                            ? "ActivePalette"
+                            : "paletteButton"}
                         style="background-color: {clr};"
                         on:touchstart={() => {
                             SelectColor(clr);
@@ -211,6 +218,59 @@
                     xmlns="http://www.w3.org/2000/svg"
                     preserveAspectRatio={drawing.preserveAspectRatio}
                 >
+                    <filter id="dispmorph">
+                        <feMorphology
+                            radius="0"
+                            in="SourceGraphic"
+                            result="morph"
+                        />
+                        <feTurbulence
+                            type="turbulence"
+                            baseFrequency="0.04 0.04"
+                            numOctaves="2"
+                            result="turbulence"
+                        />
+                        <feDisplacementMap
+                            in2="turbulence"
+                            in="morph"
+                            scale="1"
+                            xChannelSelector="B"
+                            yChannelSelector="G"
+                        />
+                        <feGaussianBlur
+                            in="turbuled"
+                            stdDeviation="0.4"
+                            result="blur"
+                        />
+
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.1"
+                            result="noise"
+                            numOctaves="2"
+                        />
+                        <feDiffuseLighting
+                            in="noise"
+                            lighting-color="#ffffff"
+                            surfaceScale="2"
+                        >
+                            <feDistantLight azimuth="100" elevation="60" />
+                        </feDiffuseLighting>
+
+                        <feGaussianBlur
+                            in="paper"
+                            stdDeviation="1.2"
+                            result="blurredpaper"
+                        />
+
+                        <feComposite
+                            operator="arithmetic"
+                            k1="1"
+                            in="blur"
+                            in2="blurredpaper"
+                        />
+                    </filter>
+
                     {#each drawing.gs as G}
                         <g
                             transform={G.transform}
@@ -218,23 +278,26 @@
                             stroke={G.stroke}
                         >
                             {#each G.vectors.path as pathson}
-                                {#if pathson.fill !== Fill.Black}
+                                {#if pathson.fill === Fill.Black}
                                     <path
                                         d={pathson.d}
                                         fill={pathson.fill}
                                         stroke={pathson.stroke}
-                                        on:touchstart={() => {
-                                            DrawingPolygonClicked(pathson);
-                                        }}
-                                        on:mousedown={() => {
-                                            DrawingPolygonClicked(pathson);
-                                        }}
                                     />
                                 {:else}
                                     <path
                                         d={pathson.d}
                                         fill={pathson.fill}
                                         stroke={pathson.stroke}
+                                        filter={pathson.fill === Fill.White
+                                            ? ""
+                                            : "url(#dispmorph)"}
+                                        on:touchstart={() => {
+                                            DrawingPolygonClicked(pathson);
+                                        }}
+                                        on:mousedown={() => {
+                                            DrawingPolygonClicked(pathson);
+                                        }}
                                     />
                                 {/if}
                             {/each}
@@ -251,18 +314,63 @@
         border: 1px solid rgb(99, 99, 99);
         border-radius: 0.5rem;
         padding-top: 14vh;
-        height: 16vh;
+        height: 15vh;
         padding-bottom: 0;
         margin-top: 1vh;
         margin-bottom: 1vh;
     }
 
-    .navButton {
+    .ActivePalette:active {
+        transform: translateY(-0.5rem);
+    }
+
+    .ActivePalette {
+        box-shadow: 0 1vh rgba(153, 153, 153, 0.3);
+
+        border: 1px solid rgb(99, 99, 99);
+        border-radius: 0.5rem;
+        padding-top: 10vh;
         height: 6vh;
+        padding-bottom: 0;
+        margin-top: 4vh;
+        margin-bottom: 4vh;
+        animation: beat 2s ease 0s 1 normal forwards;
+
+    }
+    @keyframes beat {
+        0% {
+            animation-timing-function: ease-out;
+            transform: scale(1);
+            transform-origin: center center;
+        }
+
+        10% {
+            animation-timing-function: ease-in;
+            transform: scale(0.91);
+        }
+
+        17% {
+            animation-timing-function: ease-out;
+            transform: scale(0.98);
+        }
+
+        33% {
+            animation-timing-function: ease-in;
+            transform: scale(0.87);
+        }
+
+        45% {
+            animation-timing-function: ease-out;
+            transform: scale(1);
+        }
+    }
+
+    .navButton {
+        height: 8vh;
         padding-top: 0;
         padding-bottom: 0;
-        margin-top: 0.5vh;
-        margin-bottom: 0.5vh;
+        margin-top: 0.7vh;
+        margin-bottom: 0.3vh;
     }
 
     .cheatButton {
