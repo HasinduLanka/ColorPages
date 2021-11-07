@@ -2,7 +2,14 @@
     import { Route } from "./routes";
     import type { IDrawing, Path } from "./drawing";
     import { Fill } from "./drawing";
-    import { CDrawing, CDrawingID, DeleteDrawing, SaveDrawing } from "./vars";
+    import {
+        CDrawing,
+        CDrawingID,
+        DeleteDrawing,
+        SaveDrawing,
+        SoundFillPaint,
+        SoundPaintSelect,
+    } from "./vars";
     import Boom from "./boom";
 
     let drawing: IDrawing = $CDrawing;
@@ -87,8 +94,14 @@
     let palette = palettes[selectedPalette];
     let SelectedColor = palette[0];
 
-    function SelectColor(clr: string) {
+    function SelectColor(event, clr: string) {
         SelectedColor = clr;
+
+        event.stopPropagation();
+        event.preventDefault();
+
+        var audio = new Audio(SoundPaintSelect);
+        audio.play();
     }
 
     function SwitchPalette() {
@@ -127,12 +140,17 @@
     }
 
     function DrawingPolygonClicked(pathson: Path, event) {
+        event.stopPropagation();
+        event.preventDefault();
+
         pathson.fill = SelectedColor;
         drawing = drawing;
         WaitAndSave();
         cheatcode = "";
         PaintStrokes++;
 
+        var audio = new Audio(SoundFillPaint);
+        audio.play();
         Boom(event, SelectedColor, "shadow");
     }
 </script>
@@ -143,9 +161,6 @@
             <div
                 class="hover:bg-blue-700 navButton backbutton mx-auto"
                 on:click={() => {
-                    GoBack();
-                }}
-                on:touchstart={() => {
                     GoBack();
                 }}
             >
@@ -188,15 +203,15 @@
                             ? "ActivePalette"
                             : "paletteButton"}
                         style="background-color: {clr};"
-                        on:touchstart={() => {
-                            SelectColor(clr);
+                        on:touchstart={(event) => {
                             cheatcode += i.toString();
                             CheckCheats();
+                            SelectColor(event, clr);
                         }}
-                        on:mousedown={() => {
-                            SelectColor(clr);
+                        on:mousedown={(event) => {
                             cheatcode += i.toString();
                             CheckCheats();
+                            SelectColor(event, clr);
                         }}
                     >
                         &nbsp;
