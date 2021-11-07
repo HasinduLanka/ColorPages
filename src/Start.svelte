@@ -32,40 +32,42 @@
     }
 </script>
 
-<div class="flex-1">
-    <div class="p-4 mx-auto text-center max-w-xl">
-        <h1
-            class="uppercase text-6xl leading-normal text-purple-700 animate-pulse"
+<div class="flex">
+    <div class="flex-1">
+        <div class="p-4 mx-auto text-center max-w-xl">
+            <h1
+                class="uppercase text-6xl leading-normal text-purple-700 animate-pulse"
+            >
+                Color Book
+            </h1>
+        </div>
+        <div
+            class="px-16 mx-auto max-w-max grid justify-around grid-cols-3 gap-4 items-center "
         >
-            Color Book
-        </h1>
-    </div>
-    <div
-        class="px-16 mx-auto max-w-max grid justify-around grid-cols-3 gap-4 items-center "
-    >
-        {#each Object.entries(Drawings) as [drawingID, drawing]}
-            <div
-                class="shadow-xl "
-                on:click={() => {
-                    CloneGoColorPage(drawingID, drawing);
-                }}
-            >
-                <RenderSvgson {drawing} />
-            </div>
-        {/each}
-    </div>
-    <div
-        class="px-16 mx-auto max-w-max grid justify-around grid-cols-3 gap-4 items-center "
-    >
-        {#each ListSavedDrawings() as ID}
-            <div
-                class="shadow-xl "
-                on:click={() => {
-                    LoadGoColorPage(ID);
-                }}
-            >
-                <RenderSvgson drawing={LoadDrawing(ID)} />
-            </div>
-        {/each}
+            {#each Object.entries(Drawings) as [drawingID, drawing]}
+                <div
+                    class="shadow-xl "
+                    on:click={() => {
+                        CloneGoColorPage(drawingID, drawing);
+                    }}
+                >
+                    <RenderSvgson {drawing} />
+                </div>
+            {/each}
+        </div>
+        <div
+            class="px-16 mx-auto max-w-max grid justify-around grid-cols-3 gap-4 items-center "
+        >
+            {#each ListSavedDrawings() as ID}
+                <div
+                    class="shadow-xl "
+                    on:click={() => {
+                        LoadGoColorPage(ID);
+                    }}
+                >
+                    <RenderSvgson drawing={LoadDrawing(ID)} />
+                </div>
+            {/each}
+        </div>
     </div>
 </div>

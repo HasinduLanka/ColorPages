@@ -39,7 +39,7 @@
 
 <GlobalCss />
 
-<div class="flex" on:click={openFullscreen}>
+<div on:click={openFullscreen}>
 	{#if $Route === ""}
 		<Start />
 	{:else if $Route === "colorpage"}
