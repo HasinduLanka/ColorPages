@@ -14,8 +14,7 @@ async function onInstall(event) {
                 'index.html',
                 'favicon.png',
                 'build/bundle.css',
-                'build/bundle.js',
-                'build/bundle.js.map'
+                'build/bundle.js'
             ]);
         })
     );
