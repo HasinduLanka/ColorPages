@@ -2,6 +2,7 @@
     import { ulid } from "ulid";
     import { Route } from "./routes";
     import RenderSvgson from "./RenderSvgson.svelte";
+    import Boom from "./boom";
 
     import type { IDrawing } from "./drawing";
 
@@ -30,11 +31,15 @@
             $Route = "colorpage";
         }
     }
+
+    function BoomClick(event) {
+        Boom(event, "#FFFFFF", "emoji");
+    }
 </script>
 
 <div class="flex">
     <div class="flex-1">
-        <div class="p-4 mx-auto text-center max-w-xl">
+        <div class="p-4 mx-auto text-center max-w-xl" on:click={BoomClick}>
             <h1
                 class="uppercase text-6xl leading-normal text-purple-700 animate-pulse"
             >

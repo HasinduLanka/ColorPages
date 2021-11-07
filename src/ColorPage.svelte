@@ -3,6 +3,7 @@
     import type { IDrawing, Path } from "./drawing";
     import { Fill } from "./drawing";
     import { CDrawing, CDrawingID, DeleteDrawing, SaveDrawing } from "./vars";
+    import Boom from "./boom";
 
     let drawing: IDrawing = $CDrawing;
 
@@ -10,6 +11,7 @@
         Save();
 
         if (PaintStrokes < 1) {
+            console.log("Deleting ", $CDrawingID);
             DeleteDrawing($CDrawingID);
         }
 
@@ -77,8 +79,8 @@
     }
 
     let palettes = [
-        ["#FF0000", "#00EE00", "#008B8B", "#EEEE00", "#FF00FF"],
-        ["#800000", "#008000", "#0000FF", "#EEA500", "#800080"],
+        ["#FF0000", "#00EE00", "#0033FF", "#EEEE00", "#FF00FF"],
+        ["#800000", "#008000", "#0099AA", "#EEA500", "#A000A0"],
         ["#111111", "#888888", "#EEEEEE", "#C68642", "#F1C27D"],
     ];
     let selectedPalette = 0;
@@ -124,12 +126,14 @@
         }
     }
 
-    function DrawingPolygonClicked(pathson: Path) {
+    function DrawingPolygonClicked(pathson: Path, event) {
         pathson.fill = SelectedColor;
         drawing = drawing;
         WaitAndSave();
         cheatcode = "";
         PaintStrokes++;
+
+        Boom(event, SelectedColor, "shadow");
     }
 </script>
 
@@ -292,11 +296,17 @@
                                         filter={pathson.fill === Fill.White
                                             ? ""
                                             : "url(#dispmorph)"}
-                                        on:touchstart={() => {
-                                            DrawingPolygonClicked(pathson);
+                                        on:touchstart={(event) => {
+                                            DrawingPolygonClicked(
+                                                pathson,
+                                                event
+                                            );
                                         }}
-                                        on:mousedown={() => {
-                                            DrawingPolygonClicked(pathson);
+                                        on:mousedown={(event) => {
+                                            DrawingPolygonClicked(
+                                                pathson,
+                                                event
+                                            );
                                         }}
                                     />
                                 {/if}
@@ -335,7 +345,6 @@
         margin-top: 4vh;
         margin-bottom: 4vh;
         animation: beat 2s ease 0s 1 normal forwards;
-
     }
     @keyframes beat {
         0% {
