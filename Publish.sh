@@ -1,10 +1,10 @@
 #!/bin/sh
 
-rm -rf publish
-mkdir publish
+rm -rf published
+mkdir published
 
-cd publish
-# ./publish/
+cd published
+# ./published/
 
 git clone --single-branch --depth 1  https://github.com/rainbowkids/colorbook.git
 
@@ -17,10 +17,10 @@ cd ..
 
 npm run build
 
-cp -r public publish/colorbook
+cp -r public published/colorbook
 
-cd publish
-# ./publish/
+cd published
+# ./published/
 
 mv .git colorbook/.git
 
@@ -29,3 +29,8 @@ cd colorbook
 git add .
 git commit -m "V $(date '+%Y-%m-%d')"
 git push
+
+cd ../..
+# ./
+
+rm -rf published

@@ -3,7 +3,7 @@ self.addEventListener('install', event => event.waitUntil(onInstall(event)));
 self.addEventListener('activate', event => event.waitUntil(onActivate(event)));
 self.addEventListener('fetch', event => event.respondWith(onFetch(event)));
 
-const version = 'rv0900';
+const version = 'rv0901';
 
 const CacheName = 'colorbook-' + version;
 
