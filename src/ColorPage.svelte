@@ -154,7 +154,7 @@
         Boom(event, SelectedColor, "shadow");
     }
 
-    // Power_RandomColor();
+    Power_RandomColor();
 </script>
 
 <div class="h-screen w-screen flex ">
