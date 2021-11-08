@@ -1,6 +1,6 @@
 <script lang="ts">
     import { ulid } from "ulid";
-    import { Route } from "./routes";
+    import { Route, RouteProperties } from "./HashRoutes";
     import RenderSvgson from "./RenderSvgson.svelte";
     import Boom from "./boom";
 
@@ -10,8 +10,6 @@
         Drawings,
         SaveDrawing,
         LoadDrawing,
-        CDrawing,
-        CDrawingID,
         ListSavedDrawings,
     } from "./vars";
 
@@ -25,9 +23,7 @@
         let cdrawing = LoadDrawing(id);
 
         if (cdrawing) {
-            $CDrawingID = id;
-            $CDrawing = cdrawing;
-
+            $RouteProperties = { CDrwID: id };
             $Route = "colorpage";
         }
     }

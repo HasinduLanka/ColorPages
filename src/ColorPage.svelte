@@ -1,28 +1,56 @@
 <script lang="ts">
-    import { Route } from "./routes";
+    import { Route, RouteProperties } from "./HashRoutes";
     import type { IDrawing, Path } from "./drawing";
     import { Fill } from "./drawing";
     import {
-        CDrawing,
-        CDrawingID,
         DeleteDrawing,
+        LoadDrawing,
         SaveDrawing,
         SoundFillPaint,
         SoundPaintSelect,
     } from "./vars";
     import Boom from "./boom";
 
-    let drawing: IDrawing = $CDrawing;
+    let CDrawingID: string;
+    let drawing: IDrawing;
+
+    if ($RouteProperties && $RouteProperties.CDrwID) {
+        CDrawingID = $RouteProperties.CDrwID;
+
+        try {
+            drawing = LoadDrawing(CDrawingID);
+
+            if (drawing) {
+                console.log("Drawing : ", CDrawingID);
+            } else {
+                console.log("Drawing : ", CDrawingID, " not loaded");
+                GoHomeNow();
+            }
+        } catch (error) {
+            console.error(error);
+            GoHomeNow();
+        }
+    } else {
+        console.log("No CDrawingID found");
+        GoHomeNow();
+    }
+
+    function GoHomeNow() {
+        $RouteProperties = {};
+        $Route = "";
+    }
 
     function GoBack() {
         Save();
 
-        if (PaintStrokes < 1) {
-            console.log("Deleting ", $CDrawingID);
-            DeleteDrawing($CDrawingID);
-        }
+        // TODO : 
+        // if (PaintStrokes < 1) {
+        //     console.log("Deleting ", CDrawingID);
+        //     DeleteDrawing(CDrawingID);
+        // }
 
-        $Route = "";
+        GoHomeNow();
+        return;
     }
     function GetRandomColor() {
         var letters = "05AF";
@@ -65,7 +93,7 @@
     }
 
     function Save() {
-        SaveDrawing($CDrawingID, drawing);
+        SaveDrawing(CDrawingID, drawing);
         console.log("Saved!");
     }
 
@@ -134,7 +162,8 @@
 
     function ConfirmAndDelete() {
         if (confirm("Delete this drawing ? Tap [ok] to delete")) {
-            DeleteDrawing($CDrawingID);
+            DeleteDrawing(CDrawingID);
+            $RouteProperties = {};
             $Route = "";
         }
     }
@@ -157,184 +186,188 @@
     // Power_RandomColor();
 </script>
 
-<div class="h-screen w-screen flex ">
-    <div style="width: 10vw" class="h-screen">
-        <div class="items-center h-screen text-gray-300 bg-blue-800 py-1 px-1">
+{#if drawing}
+    <div class="h-screen w-screen flex ">
+        <div style="width: 10vw" class="h-screen">
             <div
-                class="hover:bg-blue-700 navButton backbutton mx-auto"
-                on:click={() => {
-                    GoBack();
-                }}
+                class="items-center h-screen text-gray-300 bg-blue-800 py-1 px-1"
             >
-                &nbsp;
-            </div>
+                <div
+                    class="hover:bg-blue-700 navButton backbutton mx-auto"
+                    on:click={() => {
+                        GoBack();
+                    }}
+                >
+                    &nbsp;
+                </div>
 
-            {#if CheatsActive}
-                <div
-                    class="hover:bg-red-400 icon-delete mx-auto cheatButton"
-                    on:click={() => {
-                        DeletePresses++;
-                        if (DeletePresses > 3) {
-                            DeletePresses = 0;
-                            ConfirmAndDelete();
-                        }
-                    }}
-                >
-                    &nbsp;
-                </div>
-                <div
-                    class="hover:bg-blue-900 icon-colorreset mx-auto cheatButton"
-                    on:click={() => {
-                        Power_Whitout();
-                    }}
-                >
-                    &nbsp;
-                </div>
-                <div
-                    class="hover:bg-purple-700 icon-colorfill mx-auto cheatButton"
-                    on:click={() => {
-                        Power_RandomColor();
-                    }}
-                >
-                    &nbsp;
-                </div>
-            {:else}
-                {#each palette as clr, i}
+                {#if CheatsActive}
                     <div
-                        class={SelectedColor == clr
-                            ? "ActivePalette"
-                            : "paletteButton"}
-                        style="background-color: {clr};"
-                        on:touchstart={(event) => {
-                            cheatcode += i.toString();
-                            CheckCheats();
-                            SelectColor(event, clr);
-                        }}
-                        on:mousedown={(event) => {
-                            cheatcode += i.toString();
-                            CheckCheats();
-                            SelectColor(event, clr);
+                        class="hover:bg-red-400 icon-delete mx-auto cheatButton"
+                        on:click={() => {
+                            DeletePresses++;
+                            if (DeletePresses > 3) {
+                                DeletePresses = 0;
+                                ConfirmAndDelete();
+                            }
                         }}
                     >
                         &nbsp;
                     </div>
-                {/each}
-            {/if}
+                    <div
+                        class="hover:bg-blue-900 icon-colorreset mx-auto cheatButton"
+                        on:click={() => {
+                            Power_Whitout();
+                        }}
+                    >
+                        &nbsp;
+                    </div>
+                    <div
+                        class="hover:bg-purple-700 icon-colorfill mx-auto cheatButton"
+                        on:click={() => {
+                            Power_RandomColor();
+                        }}
+                    >
+                        &nbsp;
+                    </div>
+                {:else}
+                    {#each palette as clr, i}
+                        <div
+                            class={SelectedColor == clr
+                                ? "ActivePalette"
+                                : "paletteButton"}
+                            style="background-color: {clr};"
+                            on:touchstart={(event) => {
+                                cheatcode += i.toString();
+                                CheckCheats();
+                                SelectColor(event, clr);
+                            }}
+                            on:mousedown={(event) => {
+                                cheatcode += i.toString();
+                                CheckCheats();
+                                SelectColor(event, clr);
+                            }}
+                        >
+                            &nbsp;
+                        </div>
+                    {/each}
+                {/if}
 
-            <div
-                class="hover:bg-blue-700 navButton icon-palette mx-auto "
-                on:click={SwitchPalette}
-            >
-                &nbsp;
+                <div
+                    class="hover:bg-blue-700 navButton icon-palette mx-auto "
+                    on:click={SwitchPalette}
+                >
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+        <div style="width: 90vw;" class="h-screen">
+            <div class="h-screen">
+                {#if drawing}
+                    <svg
+                        width="100%"
+                        height="100vh"
+                        viewBox={drawing.viewBox}
+                        xmlns="http://www.w3.org/2000/svg"
+                        preserveAspectRatio={drawing.preserveAspectRatio}
+                    >
+                        <filter id="dispmorph">
+                            <feMorphology
+                                radius="0"
+                                in="SourceGraphic"
+                                result="morph"
+                            />
+                            <feTurbulence
+                                type="turbulence"
+                                baseFrequency="0.04 0.04"
+                                numOctaves="2"
+                                result="turbulence"
+                            />
+                            <feDisplacementMap
+                                in2="turbulence"
+                                in="morph"
+                                scale="1"
+                                xChannelSelector="B"
+                                yChannelSelector="G"
+                            />
+                            <feGaussianBlur
+                                in="turbuled"
+                                stdDeviation="0.4"
+                                result="blur"
+                            />
+
+                            <feTurbulence
+                                type="fractalNoise"
+                                baseFrequency="0.1"
+                                result="noise"
+                                numOctaves="2"
+                            />
+                            <feDiffuseLighting
+                                in="noise"
+                                lighting-color="#ffffff"
+                                surfaceScale="2"
+                            >
+                                <feDistantLight azimuth="100" elevation="60" />
+                            </feDiffuseLighting>
+
+                            <feGaussianBlur
+                                in="paper"
+                                stdDeviation="1.2"
+                                result="blurredpaper"
+                            />
+
+                            <feComposite
+                                operator="arithmetic"
+                                k1="1"
+                                in="blur"
+                                in2="blurredpaper"
+                            />
+                        </filter>
+
+                        {#each drawing.gs as G}
+                            <g
+                                transform={G.transform}
+                                fill={G.fill}
+                                stroke={G.stroke}
+                            >
+                                {#each G.vectors.path as pathson}
+                                    {#if pathson.fill === Fill.Black}
+                                        <path
+                                            d={pathson.d}
+                                            fill={pathson.fill}
+                                            stroke={pathson.stroke}
+                                        />
+                                    {:else}
+                                        <path
+                                            d={pathson.d}
+                                            fill={pathson.fill}
+                                            stroke={pathson.stroke}
+                                            filter={pathson.fill === Fill.White
+                                                ? ""
+                                                : "url(#dispmorph)"}
+                                            on:touchstart={(event) => {
+                                                DrawingPolygonClicked(
+                                                    pathson,
+                                                    event
+                                                );
+                                            }}
+                                            on:mousedown={(event) => {
+                                                DrawingPolygonClicked(
+                                                    pathson,
+                                                    event
+                                                );
+                                            }}
+                                        />
+                                    {/if}
+                                {/each}
+                            </g>
+                        {/each}
+                    </svg>
+                {/if}
             </div>
         </div>
     </div>
-    <div style="width: 90vw;" class="h-screen">
-        <div class="h-screen">
-            {#if drawing}
-                <svg
-                    width="100%"
-                    height="100vh"
-                    viewBox={drawing.viewBox}
-                    xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio={drawing.preserveAspectRatio}
-                >
-                    <filter id="dispmorph">
-                        <feMorphology
-                            radius="0"
-                            in="SourceGraphic"
-                            result="morph"
-                        />
-                        <feTurbulence
-                            type="turbulence"
-                            baseFrequency="0.04 0.04"
-                            numOctaves="2"
-                            result="turbulence"
-                        />
-                        <feDisplacementMap
-                            in2="turbulence"
-                            in="morph"
-                            scale="1"
-                            xChannelSelector="B"
-                            yChannelSelector="G"
-                        />
-                        <feGaussianBlur
-                            in="turbuled"
-                            stdDeviation="0.4"
-                            result="blur"
-                        />
-
-                        <feTurbulence
-                            type="fractalNoise"
-                            baseFrequency="0.1"
-                            result="noise"
-                            numOctaves="2"
-                        />
-                        <feDiffuseLighting
-                            in="noise"
-                            lighting-color="#ffffff"
-                            surfaceScale="2"
-                        >
-                            <feDistantLight azimuth="100" elevation="60" />
-                        </feDiffuseLighting>
-
-                        <feGaussianBlur
-                            in="paper"
-                            stdDeviation="1.2"
-                            result="blurredpaper"
-                        />
-
-                        <feComposite
-                            operator="arithmetic"
-                            k1="1"
-                            in="blur"
-                            in2="blurredpaper"
-                        />
-                    </filter>
-
-                    {#each drawing.gs as G}
-                        <g
-                            transform={G.transform}
-                            fill={G.fill}
-                            stroke={G.stroke}
-                        >
-                            {#each G.vectors.path as pathson}
-                                {#if pathson.fill === Fill.Black}
-                                    <path
-                                        d={pathson.d}
-                                        fill={pathson.fill}
-                                        stroke={pathson.stroke}
-                                    />
-                                {:else}
-                                    <path
-                                        d={pathson.d}
-                                        fill={pathson.fill}
-                                        stroke={pathson.stroke}
-                                        filter={pathson.fill === Fill.White
-                                            ? ""
-                                            : "url(#dispmorph)"}
-                                        on:touchstart={(event) => {
-                                            DrawingPolygonClicked(
-                                                pathson,
-                                                event
-                                            );
-                                        }}
-                                        on:mousedown={(event) => {
-                                            DrawingPolygonClicked(
-                                                pathson,
-                                                event
-                                            );
-                                        }}
-                                    />
-                                {/if}
-                            {/each}
-                        </g>
-                    {/each}
-                </svg>
-            {/if}
-        </div>
-    </div>
-</div>
+{/if}
 
 <style>
     .paletteButton {

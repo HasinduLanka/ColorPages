@@ -2,10 +2,6 @@ import { writable, readable, Writable } from "svelte/store";
 import drawings from "./drawings";
 import type { IDrawings, IDrawing } from "./drawing";
 
-// Current drawings
-export let CDrawingID = writable("");
-export let CDrawing: Writable<IDrawing> = writable();
-
 export let Drawings = drawings as IDrawings;
 
 export function SaveDrawing(id: string, drawing: IDrawing) {

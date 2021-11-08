@@ -2,7 +2,17 @@
 	import GlobalCss from "./GlobalCss.svelte";
 	import Start from "./Start.svelte";
 	import ColorPage from "./ColorPage.svelte";
-	import { Route } from "./routes";
+	import { Route, RouteData, RoutedComponent, Routes } from "./HashRoutes";
+
+	Routes[""] = new RouteData(Start, []);
+	Routes["colorpage"] = new RouteData(ColorPage, ["CDrwID"]);
+
+	let ORoute = $Route;
+	Route.set("-"); // No effect
+	Route.set(ORoute);
+	ORoute = null;
+
+	console.log("Routes: ", Routes, "Route: " + $Route);
 
 	async function openFullscreen() {
 		try {
@@ -40,9 +50,5 @@
 <GlobalCss />
 
 <div on:click={openFullscreen}>
-	{#if $Route === ""}
-		<Start />
-	{:else if $Route === "colorpage"}
-		<ColorPage />
-	{/if}
+	<svelte:component this={$RoutedComponent} />
 </div>
