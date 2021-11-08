@@ -153,6 +153,8 @@
         audio.play();
         Boom(event, SelectedColor, "shadow");
     }
+
+    // Power_RandomColor();
 </script>
 
 <div class="h-screen w-screen flex ">

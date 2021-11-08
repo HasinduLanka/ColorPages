@@ -52,4 +52,4 @@ for (const drawingID in Drawings) {
 }
 
 
-fs.writeFileSync("src/drawings.js", "export default " + JSON.stringify(R, null, 1, "\n\n\n"));
+fs.writeFileSync("src/drawings.js", "export default " + JSON.stringify(R));
