@@ -19,7 +19,7 @@ export interface RouteDic {
 
 // Changing the Route will change the hash of url and trigger the route change.
 // Change RouteProperties before changing the route if you want to change the route properties.
-export let Route: Writable<string> = writable("");
+export let Route: Writable<string> = writable("-");
 
 // Changing RouteProprerties won't change the URL hash immediately, but only after the next change to Route
 export let RouteProperties: Writable<Properties> = writable({});
@@ -33,13 +33,12 @@ let _route = "";
 
 Route.subscribe((newroute) => {
 
+    _route = newroute;
     if (newroute === '-') {
         return;
     }
 
-    _route = newroute;
-
-    let newHash = GetURLHash();
+    let newHash = MakeURLHash();
 
     let windowhash = WindowHash();
 
@@ -63,13 +62,12 @@ Route.subscribe((newroute) => {
         RoutedComponent.set(component);
         RouteProperties.set(properties);
 
-        console.log("Routed to " + _route);
+        console.log("Routed to '" + _route + "'");
     } else {
         RoutedComponent.set(null);
         RouteProperties.set({});
 
-        console.log("Route data not found: '" + _route + "'");
-        console.log("Routes: " + JSON.stringify(Routes));
+        console.error("Route data for '" + _route + "' not found!");
     }
 
 });
@@ -78,7 +76,7 @@ RouteProperties.subscribe((props) => {
     _routeProprerties = props;
 });
 
-function GetURLHash(): string {
+function MakeURLHash(): string {
     return _route + ":" + encodeURIComponent(JSON.stringify(_routeProprerties));
 }
 
@@ -90,20 +88,10 @@ function WindowHash() {
     return windowhash;
 }
 
-
-window.addEventListener("hashchange", () => {
-    WindowChanged();
-});
-
-window.addEventListener("load", () => {
-    WindowChanged();
-});
-
-function WindowChanged() {
+function WindowLocationChanged() {
     let windowhash = WindowHash();
-    console.log("Hash changed: " + windowhash);
 
-    if (windowhash !== GetURLHash()) {
+    if (windowhash !== MakeURLHash()) {
 
         const hashspl = windowhash.split(":", 2);
         let route = hashspl[0];
@@ -121,10 +109,25 @@ function WindowChanged() {
             RouteProperties.set({});
         }
 
+        console.log("Window navigated to '" + route + "' with properties ", _routeProprerties);
+
         Route.set("-");
         Route.set(route);
 
-        console.log("Route changed to ", route, " with properties ", _routeProprerties);
     }
 }
+
+
+export function BindRoutes() {
+
+    window.addEventListener("hashchange", () => {
+        WindowLocationChanged();
+    });
+
+    window.addEventListener("load", () => {
+        WindowLocationChanged();
+    });
+
+}
+
 

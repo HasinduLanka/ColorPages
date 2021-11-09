@@ -392,8 +392,8 @@
         padding-top: 10vh;
         height: 6vh;
         padding-bottom: 0;
-        margin-top: 4vh;
-        margin-bottom: 4vh;
+        margin-top: 3vh;
+        margin-bottom: 3vh;
         animation: beat 2s ease 0s 1 normal forwards;
     }
     @keyframes beat {

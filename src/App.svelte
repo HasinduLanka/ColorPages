@@ -4,15 +4,6 @@
 	import ColorPage from "./ColorPage.svelte";
 	import { Route, RouteData, RoutedComponent, Routes } from "./HashRoutes";
 
-	Routes[""] = new RouteData(Start, []);
-	Routes["colorpage"] = new RouteData(ColorPage, ["CDrwID"]);
-
-	let ORoute = $Route;
-	Route.set("-"); // No effect
-	Route.set(ORoute);
-	ORoute = null;
-
-	console.log("Routes: ", Routes, "Route: " + $Route);
 
 	async function openFullscreen() {
 		try {

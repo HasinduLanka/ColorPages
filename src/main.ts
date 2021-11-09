@@ -1,3 +1,6 @@
+import ConfigRoutes from "./Routings";
+ConfigRoutes();
+
 import App from './App.svelte';
 
 const app = new App({
