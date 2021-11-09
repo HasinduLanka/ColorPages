@@ -8,6 +8,7 @@
         SaveDrawing,
         SoundFillPaint,
         SoundPaintSelect,
+        GetRandomColor,
     } from "./vars";
     import Boom from "./boom";
 
@@ -46,21 +47,11 @@
             DeleteDrawing(DrawingID);
         }
 
+        var audio = new Audio(SoundFillPaint);
+        audio.play();
+
         GoHomeNow();
         return;
-    }
-    function GetRandomColor() {
-        var letters = "05AF";
-        var color = "#";
-        for (var i = 0; i < 3; i++) {
-            let c = letters[Math.floor(Math.random() * 4)];
-            color += c + c;
-        }
-        if (color === "#000000" || color === "#FFFFFF") {
-            return GetRandomColor();
-        }
-
-        return color;
     }
 
     function Power_RandomColor() {
@@ -111,10 +102,24 @@
     }
 
     let palettes = [
-        ["#FF0000", "#00EE00", "#0033FF", "#EEEE00", "#FF00FF"],
-        ["#800000", "#008000", "#0099AA", "#EEA500", "#A000A0"],
-        ["#111111", "#888888", "#EEEEEE", "#C68642", "#F1C27D"],
+        ["#FF0000", "#00EE00", "#0033FF", "#EEEE00", "#FF4DFF"],
+        ["#111111", "#EEEEEE", "#4169E1", "#F1C27D", "#FF00FF"],
     ];
+
+    let paletteShades = {
+        "#FF0000": "#800000",
+        "#00EE00": "#228B22",
+        "#0033FF": "#1E90FF",
+        "#EEEE00": "#EEA500",
+        "#FF4DFF": "#9900cc",
+
+        "#111111": "#444444",
+        "#EEEEEE": "#888888",
+        "#4169E1": "#008B8B",
+        "#F1C27D": "#C68642",
+        "#FF00FF": "#4B0082",
+    };
+
     let selectedPalette = 0;
     let palette = palettes[selectedPalette];
     let SelectedColor = palette[0];
@@ -168,15 +173,26 @@
         event.stopPropagation();
         event.preventDefault();
 
-        pathson.fill = SelectedColor;
+        let shade: string = SelectedColor;
+
+        if (pathson.fill === SelectedColor) {
+            shade = paletteShades[SelectedColor];
+            if (!shade) {
+                shade = SelectedColor;
+            }
+        }
+
+        pathson.fill = shade;
+
         drawing = drawing;
         WaitAndSave();
         cheatcode = "";
         drawing.strokeCount++;
 
+        Boom(event, shade, "shadow");
+
         var audio = new Audio(SoundFillPaint);
         audio.play();
-        Boom(event, SelectedColor, "shadow");
     }
 
     // Power_RandomColor();

@@ -1,7 +1,7 @@
 
 let effectCount = 0;
 
-export default function Boom(event, color: string = "rgba(0, 180, 255, 0.5)", type: 'square' | 'emoji' | 'shadow' = 'shadow') {
+export default async function Boom(event, color: string = "rgba(0, 180, 255, 0.5)", type: 'square' | 'emoji' | 'shadow' = 'shadow') {
     let amount = 10;
     switch (type) {
         case 'shadow':

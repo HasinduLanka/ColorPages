@@ -11,6 +11,9 @@
         SaveDrawing,
         LoadDrawing,
         ListSavedDrawings,
+        SoundPaintSelect,
+        SoundFillPaint,
+        GetRandomColor,
     } from "./vars";
 
     function CloneGoColorPage(drawingID: string, drawing: IDrawing) {
@@ -28,14 +31,22 @@
         }
     }
 
-    function BoomClick(event) {
+    function LogoClick(event) {
         Boom(event, "#FFFFFF", "emoji");
+        var audio = new Audio(SoundPaintSelect);
+        audio.play();
+    }
+
+    function DrawingIconClick(event) {
+        Boom(event, GetRandomColor(), "square");
+        var audio = new Audio(SoundFillPaint);
+        audio.play();
     }
 </script>
 
 <div class="flex">
     <div class="flex-1">
-        <div class="p-4 mx-auto text-center max-w-xl" on:click={BoomClick}>
+        <div class="p-4 mx-auto text-center max-w-xl" on:click={LogoClick}>
             <h1
                 class="uppercase text-6xl leading-normal text-purple-700 animate-pulse"
             >
@@ -48,7 +59,8 @@
             {#each Object.entries(Drawings) as [drawingID, drawing]}
                 <div
                     class="shadow-xl "
-                    on:click={() => {
+                    on:click={(event) => {
+                        DrawingIconClick(event);
                         CloneGoColorPage(drawingID, drawing);
                     }}
                 >
@@ -62,7 +74,8 @@
             {#each ListSavedDrawings() as ID}
                 <div
                     class="shadow-xl "
-                    on:click={() => {
+                    on:click={(event) => {
+                        DrawingIconClick(event);
                         LoadGoColorPage(ID);
                     }}
                 >
