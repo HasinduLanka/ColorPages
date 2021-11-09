@@ -16,7 +16,8 @@ for (const drawingID in Drawings) {
         r["viewBox"] = drawing.attributes.viewBox;
         r["preserveAspectRatio"] = drawing.attributes.preserveAspectRatio;
 
-        r["gs"] = []
+        r["gs"] = [];
+        r["strokeCount"] = 0;
 
 
         for (const metachild of drawing.children) {

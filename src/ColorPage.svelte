@@ -41,11 +41,10 @@
     function GoBack() {
         Save();
 
-        // TODO :
-        // if (PaintStrokes < 1) {
-        //     console.log("Deleting ", CDrawingID);
-        //     DeleteDrawing(CDrawingID);
-        // }
+        if (drawing.strokeCount < 1) {
+            console.log("Deleting ", DrawingID);
+            DeleteDrawing(DrawingID);
+        }
 
         GoHomeNow();
         return;
@@ -152,7 +151,6 @@
         DeletePresses = 0;
     }
 
-    let PaintStrokes = 0;
     let cheatcode = "";
     let CheatsActive = false;
 
@@ -174,7 +172,7 @@
         drawing = drawing;
         WaitAndSave();
         cheatcode = "";
-        PaintStrokes++;
+        drawing.strokeCount++;
 
         var audio = new Audio(SoundFillPaint);
         audio.play();

@@ -5,6 +5,7 @@ export interface IDrawing {
     viewBox: string;
     preserveAspectRatio: string;
     gs: G[];
+    strokeCount: number;
 }
 
 export interface G {
