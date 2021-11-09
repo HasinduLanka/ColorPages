@@ -92,7 +92,14 @@ function WindowHash() {
 
 
 window.addEventListener("hashchange", () => {
+    WindowChanged();
+});
 
+window.addEventListener("load", () => {
+    WindowChanged();
+});
+
+function WindowChanged() {
     let windowhash = WindowHash();
     console.log("Hash changed: " + windowhash);
 
@@ -119,4 +126,5 @@ window.addEventListener("hashchange", () => {
 
         console.log("Route changed to ", route, " with properties ", _routeProprerties);
     }
-});
+}
+
