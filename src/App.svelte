@@ -1,9 +1,6 @@
 <script lang="ts">
 	import GlobalCss from "./GlobalCss.svelte";
-	import Start from "./Start.svelte";
-	import ColorPage from "./ColorPage.svelte";
-	import { Route, RouteData, RoutedComponent, Routes } from "./HashRoutes";
-
+	import { RoutedComponent, RouteProperties } from "./HashRoutes";
 
 	async function openFullscreen() {
 		try {
@@ -41,5 +38,5 @@
 <GlobalCss />
 
 <div on:click={openFullscreen}>
-	<svelte:component this={$RoutedComponent} />
+	<svelte:component this={$RoutedComponent} {...$RouteProperties} />
 </div>

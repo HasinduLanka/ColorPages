@@ -23,7 +23,7 @@
         let cdrawing = LoadDrawing(id);
 
         if (cdrawing) {
-            $RouteProperties = { CDrwID: id };
+            $RouteProperties = { DrawingID: id };
             $Route = "colorpage";
         }
     }

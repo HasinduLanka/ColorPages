@@ -2,11 +2,9 @@ import { writable, Writable } from "svelte/store";
 
 export class RouteData {
     Component: any;
-    PropertyKeys?: string[];
 
-    constructor(component: any, propertyKeys?: string[]) {
+    constructor(component: any) {
         this.Component = component;
-        this.PropertyKeys = propertyKeys;
     }
 }
 
@@ -49,23 +47,14 @@ Route.subscribe((newroute) => {
     let routedata = Routes[_route];
 
     if (routedata) {
-        let component = routedata.Component;
-        let propertykeys = routedata.PropertyKeys;
-
-        let properties = {};
-        if (propertykeys) {
-            propertykeys.forEach((key) => {
-                properties[key] = _routeProprerties[key];
-            });
-        }
-
-        RoutedComponent.set(component);
-        RouteProperties.set(properties);
+        RoutedComponent.set(routedata.Component);
 
         console.log("Routed to '" + _route + "'");
     } else {
         RoutedComponent.set(null);
         RouteProperties.set({});
+
+        Route.set("");
 
         console.error("Route data for '" + _route + "' not found!");
     }

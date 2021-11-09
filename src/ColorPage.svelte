@@ -11,19 +11,17 @@
     } from "./vars";
     import Boom from "./boom";
 
-    let CDrawingID: string;
+    export let DrawingID: string = null;
     let drawing: IDrawing;
 
-    if ($RouteProperties && $RouteProperties.CDrwID) {
-        CDrawingID = $RouteProperties.CDrwID;
-
+    if (DrawingID) {
         try {
-            drawing = LoadDrawing(CDrawingID);
+            drawing = LoadDrawing(DrawingID);
 
             if (drawing) {
-                console.log("Drawing : ", CDrawingID);
+                console.log("Drawing : ", DrawingID);
             } else {
-                console.log("Drawing : ", CDrawingID, " not loaded");
+                console.log("Drawing : ", DrawingID, " not loaded");
                 GoHomeNow();
             }
         } catch (error) {
@@ -31,7 +29,7 @@
             GoHomeNow();
         }
     } else {
-        console.log("No CDrawingID found");
+        console.log("No DrawingID found");
         GoHomeNow();
     }
 
@@ -43,7 +41,7 @@
     function GoBack() {
         Save();
 
-        // TODO : 
+        // TODO :
         // if (PaintStrokes < 1) {
         //     console.log("Deleting ", CDrawingID);
         //     DeleteDrawing(CDrawingID);
@@ -93,7 +91,7 @@
     }
 
     function Save() {
-        SaveDrawing(CDrawingID, drawing);
+        SaveDrawing(DrawingID, drawing);
         console.log("Saved!");
     }
 
@@ -162,7 +160,7 @@
 
     function ConfirmAndDelete() {
         if (confirm("Delete this drawing ? Tap [ok] to delete")) {
-            DeleteDrawing(CDrawingID);
+            DeleteDrawing(DrawingID);
             $RouteProperties = {};
             $Route = "";
         }

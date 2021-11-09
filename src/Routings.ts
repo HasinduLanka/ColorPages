@@ -10,8 +10,8 @@ export default function ConfigRoutes() {
     if (inited) return;
     inited = true;
 
-    Routes[""] = new RouteData(Start, []);
-    Routes["colorpage"] = new RouteData(ColorPage, ["CDrwID"]);
+    Routes[""] = new RouteData(Start);
+    Routes["colorpage"] = new RouteData(ColorPage);
 
     console.log("Routes configured");
 
