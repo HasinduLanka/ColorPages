@@ -2,17 +2,17 @@
 let effectCount = 0;
 
 export default async function Boom(event, color: string = "rgba(0, 180, 255, 0.5)", type: 'square' | 'emoji' | 'shadow' = 'shadow') {
-    let amount = 10;
+    let amount = 3;
     switch (type) {
         case 'shadow':
-            amount = 10;
+            amount = 3;
             break;
         case 'emoji':
         case 'square':
             break;
         default:
             type = 'shadow';
-            amount = 10;
+            amount = 3;
             break;
     }
 
@@ -42,7 +42,7 @@ export default async function Boom(event, color: string = "rgba(0, 180, 255, 0.5
 
 function createParticle(x: number, y: number, type: 'square' | 'emoji' | 'shadow', color: string) {
 
-    if (effectCount > 100) {
+    if (effectCount > 10) {
         return;
     }
     effectCount++;

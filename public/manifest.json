@@ -1,6 +1,6 @@
 {
-    "name": "Color Book",
-    "short_name": "Color Book",
+    "name": "Color Pages",
+    "short_name": "Color Pages",
     "start_url": "./",
     "display": "fullscreen",
     "orientation": "landscape",
