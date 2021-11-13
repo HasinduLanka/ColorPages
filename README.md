@@ -18,7 +18,7 @@ Usage of this project for open source projects is allowed and encouraged.
 ### Developer?
 
 Pull requests of new features, improvements are warmly welcomed 🤗  
-Source Repo on `https://github.com/HasinduLanka/ColorPages`
+Source Repo on https://github.com/HasinduLanka/ColorPages
 
 ### Parent of a unique child?
 

@@ -18,6 +18,7 @@ cd ..
 npm run build
 
 cp -r public published/colorbook
+cp README.md published/colorbook/README.md
 
 cd published
 # ./published/
