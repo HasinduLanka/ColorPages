@@ -1,8 +1,11 @@
-# Color Book
+# Web app on [colors.pages.dev](https://colors.pages.dev/)
+
+# Color Pages
 
 Simple line art colouring web app designed specifically for autistic children.
 
 This project targets autistic children of all ages who's cognitive abilities are limited, thus other available colouring apps are not compatible.
+
 
 # License
 
